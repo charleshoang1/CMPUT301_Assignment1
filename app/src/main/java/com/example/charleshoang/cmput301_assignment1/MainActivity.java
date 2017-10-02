@@ -20,6 +20,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Charles Hoang 1394450
+ * CMPUT 301 - Assignment 1
+ *
+ * Acknowledgements:
+ * Gson usage with shared preferences - https://stackoverflow.com/questions/7145606/how-android-sharedpreferences-save-store-object
+ * ArrayAdapter with 2 items https://www.youtube.com/watch?v=QsO1_doWcak
+ */
 public class MainActivity extends AppCompatActivity {
 
     /**
