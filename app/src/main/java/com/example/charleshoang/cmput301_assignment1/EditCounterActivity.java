@@ -86,15 +86,8 @@ public class EditCounterActivity extends AppCompatActivity {
                  * Check if both count and name are both filled. Otherwise, alert dialog.
                  */
                 if (editName.getText().toString().equals("") || editCount.toString().equals("")){
-                    missingBlankDialog(1);
+                    missingBlankDialog();
 
-                }
-                /**
-                 * Check to see if counts are higher than max value
-                 */
-                if ((Integer.parseInt(editCount.getText().toString()) > 2147483647) ||
-                    (Integer.parseInt(editInitCount.getText().toString()) > 2147483647)){
-                    missingBlankDialog(2);
                 }
                 /**
                  * Input the edit values into counter and put counter into shared preferences "counter"
@@ -165,27 +158,17 @@ public class EditCounterActivity extends AppCompatActivity {
      * Notify user to fill out missing required blanks.
      */
 
-    public void missingBlankDialog(int errorNumber) {
-        if (errorNumber == (1)) {
-            builder.setMessage("Blanks with * must be filled out.")
-                    .setNegativeButton("Return", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                            ;
-                        }
-                    })
-                    .setTitle("Missing Blanks");
-        }
-        else if (errorNumber == 2){
-            builder.setMessage("Count must be less than 2,147,483,647.")
-                    .setNegativeButton("Return", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                            ;
-                        }
-                    })
-                    .setTitle("Missing Blanks");
-        }
+    public void missingBlankDialog() {
+
+        builder.setMessage("Blanks with * must be filled out.")
+                .setNegativeButton("Return", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        ;
+                    }
+                })
+                .setTitle("Missing Blanks");
+
         builder.show();
     }
 }
