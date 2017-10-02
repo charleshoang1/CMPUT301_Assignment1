@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ViewCounterActivity extends AppCompatActivity {
@@ -279,7 +280,9 @@ public class ViewCounterActivity extends AppCompatActivity {
      */
     public void displayInformation(){
         textName.setText(viewCounter.getName());
-        textDate.setText(viewCounter.getDate().toString());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String countDate = dateFormat.format(viewCounter.getDate());
+        textDate.setText(countDate);
         textInitVal.setText(String.format("%d",viewCounter.getInitValue()));
         textCurVal.setText(String.format("%d",viewCounter.getCurValue()));
         textComment.setText(viewCounter.getComment().toString());

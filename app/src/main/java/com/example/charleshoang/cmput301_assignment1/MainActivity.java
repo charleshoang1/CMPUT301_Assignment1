@@ -18,7 +18,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +30,8 @@ import java.util.List;
  *
  * Acknowledgements:
  * Gson usage with shared preferences - https://stackoverflow.com/questions/7145606/how-android-sharedpreferences-save-store-object
- * ArrayAdapter with 2 items https://www.youtube.com/watch?v=QsO1_doWcak
+ * ArrayAdapter with 2 items - https://www.youtube.com/watch?v=QsO1_doWcak
+ * Date Conversion to yyyy-MM-dd - https://stackoverflow.com/questions/226618/how-to-transform-a-time-value-into-yyyy-mm-dd-format-in-java
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnAdd;
     ListView counterView;
     TextView textEmptyBook;
+    TextView textTotalCounter;
 
     CounterBook counterBook;
     ArrayList<Counter> testList;
@@ -151,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
         if (counterBook.getSize()>0){
             counterView.setVisibility(View.VISIBLE);
             textEmptyBook.setVisibility(View.INVISIBLE);
+            textTotalCounter.setVisibility(View.VISIBLE);
+            textTotalCounter.setText("Number of Counters: " + String.format("%d",counterBook.getSize()));
             displayListView();
         }
         /**
@@ -159,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         else{
             counterView.setVisibility(View.INVISIBLE);
             textEmptyBook.setVisibility(View.VISIBLE);
+            textTotalCounter.setVisibility(View.INVISIBLE);
 
         }
 
@@ -173,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         counterBook = new CounterBook();
         btnAdd = (Button) findViewById(R.id.cb_add_button);
         textEmptyBook = (TextView) findViewById(R.id.cb_empty_book_text);
+        textTotalCounter = (TextView) findViewById(R.id.cb_total_counter_text);
         counterView  = (ListView) findViewById(R.id.cb_counter_listview);
 
         bookSharedPref = getSharedPreferences("counterBook", Context.MODE_PRIVATE);
@@ -224,9 +233,12 @@ public class MainActivity extends AppCompatActivity {
         //Input counter's name and current value as strings
         final List<String[]> titleCountList = new ArrayList<String[]>();
         for (int i = 0; i < counterBook.getSize(); i++){
-            String countString = String.format("%d",counterBook.getCounterBook().get(i).getCurValue());
             String counterTitle = counterBook.getCounterBook().get(i).getName();
-            titleCountList.add(new String[] {counterTitle,countString});
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String countDate = dateFormat.format(counterBook.getCounterBook().get(i).getDate());
+            String countInfo = "Date Created: " + countDate
+                    + "\nCurrent Value: " + String.format("%d",counterBook.getCounterBook().get(i).getCurValue());
+            titleCountList.add(new String[] {counterTitle,countInfo});
 
         }
 
