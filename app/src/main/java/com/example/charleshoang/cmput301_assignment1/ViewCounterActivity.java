@@ -122,7 +122,7 @@ public class ViewCounterActivity extends AppCompatActivity {
                     viewCounter.setCurValue(0);
                 }
                 else{
-                    viewCounter.setCurValue(viewCounter.curValue-1);
+                    viewCounter.setCurValue(viewCounter.getCurValue()-1);
                     textCurVal.setText(String.format("%d",viewCounter.getCurValue()));
                 }
 
@@ -140,7 +140,7 @@ public class ViewCounterActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                viewCounter.setCurValue(viewCounter.curValue+1);
+                viewCounter.setCurValue(viewCounter.getCurValue()+1);
                 textCurVal.setText(String.format("%d",viewCounter.getCurValue()));
 
                 updateShared();
@@ -173,11 +173,9 @@ public class ViewCounterActivity extends AppCompatActivity {
 
                 textCurVal.setText(String.format("%d",viewCounter.getCurValue()));
                 for (int i = 0; i < countBook.getSize(); i++){
-                    Log.d("THISET", countBook.getCounterBook().get(i).getName());
                 }
                 countBook.getCounterBook().remove(bookPos);
                 for (int i = 0; i < countBook.getSize(); i++){
-                    Log.d("THISET", countBook.getCounterBook().get(i).getName());
                 }
 
                 bookSharedPref = getSharedPreferences("counterBook", Context.MODE_PRIVATE);

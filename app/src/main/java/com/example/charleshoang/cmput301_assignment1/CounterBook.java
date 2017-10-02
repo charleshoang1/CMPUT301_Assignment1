@@ -1,9 +1,5 @@
 package com.example.charleshoang.cmput301_assignment1;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +13,7 @@ public class CounterBook {
     /**
      * Array List to store Counters.
      */
-    ArrayList<Counter> counterBookList;
+    private ArrayList<Counter> counterBookList;
 
     /**
      * Constructs a new CounterBook with a List in the argument.
@@ -72,15 +68,5 @@ public class CounterBook {
         return counterBookList.size();
     }
 
-
-//    public String[] listNames(){
-//
-//        String[] names = new String[this.getSize()];
-//        for (int i = 0; i < this.getSize(); i++){
-//            names[i] = this.getCounterBook().get(i).getName();
-//        }
-//        Log.d("ThisTag","DONE" );
-//        return names;
-//    }
 
 }

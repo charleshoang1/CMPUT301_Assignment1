@@ -93,9 +93,9 @@ public class EditCounterActivity extends AppCompatActivity {
                  *
                  */
                 else{
-                    editCounter.name = editName.getText().toString();
-                    editCounter.comment = editComment.getText().toString();
-                    editCounter.curValue = Integer.parseInt(editCount.getText().toString());
+                    editCounter.setName(editName.getText().toString());
+                    editCounter.setComment(editComment.getText().toString());
+                    editCounter.setCurValue(Integer.parseInt(editCount.getText().toString()));
 
                     modifySharedPref = getSharedPreferences("counter", Context.MODE_PRIVATE);
                     modifyEditor = modifySharedPref.edit();
