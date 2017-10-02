@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     TextView textTotalCounter;
 
     CounterBook counterBook;
-    ArrayList<Counter> testList;
     Counter newCounter;
     Counter modifyCounter;
     ArrayList<Counter> arrayBook;

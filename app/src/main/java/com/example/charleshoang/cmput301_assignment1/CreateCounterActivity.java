@@ -35,10 +35,6 @@ public class CreateCounterActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     AlertDialog.Builder builder;
 
-    Counter counter;
-    CounterBook cB;
-
-
     /**
      * When the activity is created, initialize the variables.
      * Create the counter
