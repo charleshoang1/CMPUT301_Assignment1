@@ -27,6 +27,7 @@ public class EditCounterActivity extends AppCompatActivity {
     EditText editName;
     EditText editCount;
     EditText editComment;
+    EditText editInitCount;
 
     Counter editCounter;
     Gson gson;
@@ -85,8 +86,15 @@ public class EditCounterActivity extends AppCompatActivity {
                  * Check if both count and name are both filled. Otherwise, alert dialog.
                  */
                 if (editName.getText().toString().equals("") || editCount.toString().equals("")){
-                    missingBlankDialog();
+                    missingBlankDialog(1);
 
+                }
+                /**
+                 * Check to see if counts are higher than max value
+                 */
+                if ((Integer.parseInt(editCount.getText().toString()) > 2147483647) ||
+                    (Integer.parseInt(editInitCount.getText().toString()) > 2147483647)){
+                    missingBlankDialog(2);
                 }
                 /**
                  * Input the edit values into counter and put counter into shared preferences "counter"
@@ -96,7 +104,7 @@ public class EditCounterActivity extends AppCompatActivity {
                     editCounter.setName(editName.getText().toString());
                     editCounter.setComment(editComment.getText().toString());
                     editCounter.setCurValue(Integer.parseInt(editCount.getText().toString()));
-
+                    editCounter.setInitValue(Integer.parseInt(editInitCount.getText().toString()));
                     modifySharedPref = getSharedPreferences("counter", Context.MODE_PRIVATE);
                     modifyEditor = modifySharedPref.edit();
                     modifyEditor.putString("counter", new Gson().toJson(editCounter));
@@ -120,6 +128,7 @@ public class EditCounterActivity extends AppCompatActivity {
         editName = (EditText) findViewById(R.id.ec_name_edit);
         editComment = (EditText) findViewById(R.id.ec_comment_edit);
         editCount = (EditText) findViewById(R.id.ec_count_edit);
+        editInitCount = (EditText) findViewById(R.id.ec_intVal_edit);
         builder = new AlertDialog.Builder(this);
 
         /**
@@ -143,6 +152,8 @@ public class EditCounterActivity extends AppCompatActivity {
     public void inputOldText(){
         editName.setText(editCounter.getName());
 
+        editInitCount.setText(String.format("%d",editCounter.getInitValue()));
+
         editCount.setText(String.format("%d",editCounter.getCurValue()));
 
         editComment.setText(editCounter.getComment());
@@ -154,16 +165,27 @@ public class EditCounterActivity extends AppCompatActivity {
      * Notify user to fill out missing required blanks.
      */
 
-    public void missingBlankDialog() {
-        builder.setMessage("Blanks with * must be filled out.")
-                .setNegativeButton("Return", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        ;
-                    }
-                })
-                .setTitle("Missing Blanks");
-
+    public void missingBlankDialog(int errorNumber) {
+        if (errorNumber == (1)) {
+            builder.setMessage("Blanks with * must be filled out.")
+                    .setNegativeButton("Return", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            ;
+                        }
+                    })
+                    .setTitle("Missing Blanks");
+        }
+        else if (errorNumber == 2){
+            builder.setMessage("Count must be less than 2,147,483,647.")
+                    .setNegativeButton("Return", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            ;
+                        }
+                    })
+                    .setTitle("Missing Blanks");
+        }
         builder.show();
     }
 }

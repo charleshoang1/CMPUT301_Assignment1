@@ -89,16 +89,18 @@ public class CreateCounterActivity extends AppCompatActivity {
                  * Check if both count and name are both filled. Otherwise, alert dialog.
                  */
                 if (counterName.getText().toString().equals("") || counterValue.getText().toString().equals("")){
-                    missingBlankDialog();
+                    missingBlankDialog(1);
                 }
-
+                if (Integer.parseInt(counterValue.getText().toString()) >= 2147483647) {
+                    missingBlankDialog(2);
+                }
                 /**
                  * Input the name, initial count, and comment into the editor shared preference
                  */
-                else{
+                else {
 
                     editor.putString("name", counterName.getText().toString());
-                    editor.putInt("value",Integer.parseInt(counterValue.getText().toString()));
+                    editor.putInt("value", Integer.parseInt(counterValue.getText().toString()));
                     editor.putString("comment", counterComment.getText().toString());
                     editor.apply();
                     finish();
@@ -123,19 +125,30 @@ public class CreateCounterActivity extends AppCompatActivity {
 
     /**
      * Method to display a alert dialog.
-     * Notify user to fill out missing required blanks.
+     * Notify user to fill out missing required blanks or too large count.
      */
 
-    public void missingBlankDialog() {
-        builder.setMessage("Blanks with * must be filled out.")
-                .setNegativeButton("Return", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        ;
-                    }
-                })
-                .setTitle("Missing Blanks");
-
+    public void missingBlankDialog(int errorNumber) {
+        if (errorNumber == (1)) {
+            builder.setMessage("Blanks with * must be filled out.")
+                    .setNegativeButton("Return", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            ;
+                        }
+                    })
+                    .setTitle("Missing Blanks");
+        }
+        else if (errorNumber == 2){
+            builder.setMessage("Count must be less than 2,147,483,647.")
+                    .setNegativeButton("Return", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            ;
+                        }
+                    })
+                    .setTitle("Missing Blanks");
+        }
         builder.show();
     }
 }

@@ -109,8 +109,13 @@ public class Counter{
         return comment;
     }
 
+    public void setInitValue(int initValue) {
+        this.initValue = initValue;
+    }
+
     /**
      * Sets the inputted string as the new comment.
+
      * @param comment
      */
 
