@@ -2,4 +2,5 @@
     <string name="app_name">choang1-CountBook</string>
     <string name="count_book">Count Book</string>
     <string name="button_add">Add</string>
+    <string name="fill_all_fields">Fill all fields</string>
 </resources>

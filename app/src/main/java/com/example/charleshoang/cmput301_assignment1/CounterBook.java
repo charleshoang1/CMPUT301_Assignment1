@@ -1,5 +1,9 @@
 package com.example.charleshoang.cmput301_assignment1;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,22 +14,27 @@ import java.util.List;
 
 public class CounterBook {
 
-    private List<Counter> counterBook;
+    ArrayList<Counter> counterBookList;
 
     public CounterBook(){
-        counterBook = new ArrayList<Counter>();
+        counterBookList = new ArrayList<>();
     }
 
-    public CounterBook(List<Counter> counterBook) {
-        this.counterBook = counterBook;
+    public CounterBook(ArrayList<Counter> counterBook) {
+        this.counterBookList = counterBook;
     }
 
     public List<Counter> getCounterBook() {
-        return counterBook;
+        return counterBookList;
+    }
+
+
+    public void setCounterBook(ArrayList<Counter> counterBook) {
+        this.counterBookList = counterBook;
     }
 
     public boolean isEmpty(){
-        if (counterBook.isEmpty()){
+        if (counterBookList.isEmpty()){
             return true;
         }
         else{
@@ -33,6 +42,20 @@ public class CounterBook {
         }
     }
 
+    public int getSize(){
+        return counterBookList.size();
+    }
 
+    public String[] listNames(){
+
+        String[] names = new String[this.getSize()];
+        for (int i = 0; i < this.getSize(); i++){
+//            Log.d("ThisTag",""+ this.getSize());
+//            Log.d("ThisTag","HERE" + this.getCounterBook().get(i).getName());
+            names[i] = this.getCounterBook().get(i).getName();
+        }
+        Log.d("ThisTag","DONE" );
+        return names;
+    }
 
 }

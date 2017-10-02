@@ -11,6 +11,7 @@
         android:id="@+id/cc_screen_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="7dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -18,8 +19,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="?attr/colorButtonNormal"
-        android:layout_marginTop="7dp" />
+        app:srcCompat="?attr/colorButtonNormal" />
 
 
     <ImageView
@@ -74,37 +74,35 @@
 
     <Button
         android:id="@+id/cc_cancel_button"
-        style="@style/Widget.AppCompat.Button"
+        style="@android:style/Widget.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="@android:color/background_dark"
         android:text="Cancel"
         android:textColor="@android:color/background_light"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/cc_header_text"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:layout_marginStart="8dp" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/cc_create_button"
-        style="@style/Widget.AppCompat.Button"
+        style="@android:style/Widget.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:background="@android:color/background_dark"
+        android:layout_marginStart="8dp"
         android:text="Create"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/cc_name_text"
@@ -194,6 +192,35 @@
         app:layout_constraintLeft_toLeftOf="@+id/cc_commentbox"
         app:layout_constraintRight_toRightOf="@+id/cc_commentbox"
         app:layout_constraintTop_toTopOf="@+id/cc_commentbox" />
+
+    <TextView
+        android:id="@+id/cc_star1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="0dp"
+        android:text="*"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cc_count_text"
+        app:layout_constraintLeft_toRightOf="@+id/cc_count_text"
+        app:layout_constraintTop_toTopOf="@+id/cc_count_text"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/cc_star2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="0dp"
+        android:text="*"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cc_name_text"
+        app:layout_constraintLeft_toRightOf="@+id/cc_name_text"
+        app:layout_constraintTop_toTopOf="@+id/cc_name_text" />
 
 
 </android.support.constraint.ConstraintLayout>

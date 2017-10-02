@@ -1,5 +1,8 @@
 package com.example.charleshoang.cmput301_assignment1;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
@@ -7,7 +10,7 @@ import java.util.Date;
  * Class for Counter
  */
 
-public class Counter {
+public class Counter{
 
     String name;
     int initValue;
@@ -60,11 +63,11 @@ public class Counter {
 
     public String getComment() {
         return comment;
-
     }
 
     public void setComment(String comment) {
         this.comment = comment;
     }
+
 
 }
