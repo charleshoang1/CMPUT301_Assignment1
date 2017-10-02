@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initVariables();
-
 
     }
 
@@ -159,7 +159,9 @@ public class MainActivity extends AppCompatActivity {
         else{
             counterView.setVisibility(View.INVISIBLE);
             textEmptyBook.setVisibility(View.VISIBLE);
+
         }
+
     }
 
 
@@ -198,9 +200,14 @@ public class MainActivity extends AppCompatActivity {
 
         //No CounterBook is in bookSharedPref. Use Gson to input a new empty ArrayList for sharing
         if (counterBook.getCounterBook() == null){
+
             counterBook.setCounterBook(new ArrayList<Counter>());
             bookEditor.putString("counterBook", new Gson().toJson(counterBook.getCounterBook()));
             bookEditor.commit();
+
+            newCounterEditor.putInt("value",-1);;
+            newCounterEditor.apply();
+
 
         }
 
