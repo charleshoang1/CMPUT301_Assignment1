@@ -5,33 +5,38 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    CounterBook counterBook;
-    Counter newCounter;
-    ArrayList<Counter> arrayBook;
+    /**
+     * Variables that will be used in multple methods
+     */
+
     Button btnAdd;
     ListView counterView;
+    TextView textEmptyBook;
+
+    CounterBook counterBook;
+    ArrayList<Counter> testList;
+    Counter newCounter;
+    Counter modifyCounter;
+    ArrayList<Counter> arrayBook;
     Type counterListType;
+    Type counterType;
 
     SharedPreferences bookSharedPref;
     SharedPreferences newCounterShare;
@@ -42,12 +47,19 @@ public class MainActivity extends AppCompatActivity {
 
     Gson gson;
     String json;
+    String jsonModify;
 
-    String[] counterNames;
+    boolean viewedCounter;
+    int viewPosition;
+
 
 
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
+    /**
+     * On creation of activity, initialize variables.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,14 +67,22 @@ public class MainActivity extends AppCompatActivity {
 
         initVariables();
 
+
     }
 
     @Override
-
+    /**
+     * While the Activity is running, update the shared counter and book.
+     * Main method for the actions for the activity.
+     *
+     */
     protected void onResume(){
         super.onResume();
+        updateShared();
 
-
+        /**
+         * When add button is clicked, go to CreateCounterActivity.
+         */
         btnAdd.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -73,13 +93,12 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        checkBookSize();
-//        Log.d("MytAg", "Count Value: " + newCounterShare.getInt("value",0));
-        if (newCounterShare.getInt("value",0) == (-1)){
-//            Log.d("MY TAG", "DO NOT MAKE NEW COUNTER");
-        }
-        else{
-//            Log.d("MY TAG", "MAKE NEW COUNTER");
+        /**
+         * If the count is -1, lets the program know not to add a new counter.
+         * Add counter to book and update book for sharing.
+         */
+
+        if (newCounterShare.getInt("value",0) != (-1)){
             newCounter = new Counter(newCounterShare.getString("name",""),
                     newCounterShare.getInt("value",0),newCounterShare.getString("comment",""));
             newCounterEditor.putInt("value", -1);
@@ -89,11 +108,10 @@ public class MainActivity extends AppCompatActivity {
             counterBook.getCounterBook().add(newCounter);
             bookEditor.putString("counterBook", new Gson().toJson(counterBook.getCounterBook()));
             bookEditor.commit();
-
         }
-
-
-        displayListView();
+        /**
+         * Method for ListView counter click. Go to Edit Activity
+         */
         counterView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -103,101 +121,92 @@ public class MainActivity extends AppCompatActivity {
                 modifyEditor = modifyCounterShare.edit();
 
                 modifyEditor.putString("counter", new Gson().toJson(counterBook.getCounterBook().get(position)));
-                Log.d("ttext1", "TYPE OF COUNTER: " + counterBook.getCounterBook().get(position).getName());
-//                Log.d("MYTEXT", "Position of LISTVIEW: " + counterBook.getCounterBook().get(position).getName());
+                modifyEditor.putInt("position", position);
                 modifyEditor.commit();
-
-                Log.d("ttext", "TYPE OF COUNTER: " + counterBook.getCounterBook().get(position).getName());
+                bookEditor.putString("counterBook", new Gson().toJson(counterBook.getCounterBook()));
+                bookEditor.commit();
                 startActivity(viewIntent);
+                viewedCounter = true;
             }
         });
 
-
+        /**
+         * If the counter is being viewed/edited, retrieve counter
+         */
+        if (viewedCounter == true){
+            modifyCounter = gson.fromJson(jsonModify, counterType);
+            viewedCounter = false;
+        }
+        /**
+         * If the countsize is > 0, display Listview. Hide emptyList TextView/
+         */
+        if (counterBook.getSize()>0){
+            counterView.setVisibility(View.VISIBLE);
+            textEmptyBook.setVisibility(View.INVISIBLE);
+            displayListView();
+        }
+        /**
+         * Display emptyLiset TextView when book is empty
+         */
+        else{
+            counterView.setVisibility(View.INVISIBLE);
+            textEmptyBook.setVisibility(View.VISIBLE);
+        }
     }
 
 
-
+    /**
+     * Intialize Variables
+     */
     private void initVariables() {
 
         counterBook = new CounterBook();
         btnAdd = (Button) findViewById(R.id.cb_add_button);
+        textEmptyBook = (TextView) findViewById(R.id.cb_empty_book_text);
         counterView  = (ListView) findViewById(R.id.cb_counter_listview);
 
         bookSharedPref = getSharedPreferences("counterBook", Context.MODE_PRIVATE);
         bookEditor = bookSharedPref.edit();
-        json = bookSharedPref.getString("counterBook","");
+        gson = new Gson();
+        json = bookSharedPref.getString("counterBook",null);
 
 
         newCounterShare = getSharedPreferences("newCounter", Context.MODE_PRIVATE);
         newCounterEditor = newCounterShare.edit();
 
-        gson = new Gson();
+        modifyCounterShare = getSharedPreferences("counter", Context.MODE_PRIVATE);
+        modifyEditor = modifyCounterShare.edit();
+        jsonModify = modifyCounterShare.getString("counter","");
+        counterType = new TypeToken<Counter>() {}.getType();
+        counterListType = new TypeToken<ArrayList<Counter>>() {}.getType();
+        viewPosition = modifyCounterShare.getInt("position",0);
+
 
         counterListType = new TypeToken<ArrayList<Counter>>() {}.getType();
-
-//        ArrayList<Counter> emptyArray = new ArrayList<Counter>();
-//
-//        bookEditor.putString("counterBook", new Gson().toJson(emptyArray));
-//        bookEditor.commit();
-//
-//
-//
-//        bookSharedPref = getSharedPreferences("counterBook", Context.MODE_PRIVATE);
-//        bookEditor = bookSharedPref.edit();
-
+        viewedCounter = false;
 
         arrayBook = (gson.fromJson(bookSharedPref.getString("counterBook",""), counterListType));
-//        Log.d("MYTAG", "ARRAYBOOK: " +
-//                bookSharedPref.getString("abc",""));
-
         counterBook.setCounterBook(arrayBook);
-        //No CounterBook is in bookSharedPref. Use Gson to input a new empty ArrayList
+
+        //No CounterBook is in bookSharedPref. Use Gson to input a new empty ArrayList for sharing
         if (counterBook.getCounterBook() == null){
-//            Log.d("MyTag", "null");
             counterBook.setCounterBook(new ArrayList<Counter>());
             bookEditor.putString("counterBook", new Gson().toJson(counterBook.getCounterBook()));
             bookEditor.commit();
 
         }
-        else{
-
-        }
-//        Log.d("MYTAG", "READY: ARRAYBOOK SIZE: " + arrayBook.size());
-//        Log.d("ThisTag","HERE");
-
-
-        bookEditor.putString("counterBook", new Gson().toJson(counterBook.getCounterBook()));
-        bookEditor.commit();
-//        Log.d("ThisTag","HERE1");
 
         arrayBook = (gson.fromJson(json, counterListType));
         counterBook.setCounterBook(arrayBook);
-//        Log.d("MYTAG", "READY: coUNTEROBOK SIZE: " + counterBook.getSize());
-//        Log.d("ThisTag","HERE2");
     }
 
-    private void checkBookSize(){
-        if (counterBook.getCounterBook().size() == 0) {
-            Log.d("MYTAG", "Book is Empty");
-        }
-
-        else {
-            Log.d("MyTag", "Size of book is " + counterBook.getCounterBook().size());
-        }
-    }
-
-
-    public void sendMessage (View view){
-        Intent startCreateCounter = new Intent (this, CreateCounterActivity.class);
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String message = editText.getText().toString();
-        startCreateCounter.putExtra(EXTRA_MESSAGE, message);
-        startActivity(startCreateCounter);
-
-    }
+    /**
+     * Display the list view into the screen
+     */
 
     private void displayListView(){
 
+        //Input counter's name and current value as strings
         final List<String[]> titleCountList = new ArrayList<String[]>();
         for (int i = 0; i < counterBook.getSize(); i++){
             String countString = String.format("%d",counterBook.getCounterBook().get(i).getCurValue());
@@ -206,9 +215,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
-
-        ArrayAdapter<String[]> namesAdapter = new ArrayAdapter<String[]>(this,
+        //Array adapter used to populate the list view and as 2 items per row.
+        ArrayAdapter<String[]> counterDisplayAdapter = new ArrayAdapter<String[]>(this,
                 android.R.layout.simple_list_item_2, android.R.id.text1,titleCountList){
 
             @Override
@@ -225,6 +233,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        counterView.setAdapter(namesAdapter);
+        //Display the view
+        counterView.setAdapter(counterDisplayAdapter);
+    }
+
+    /**
+     * Keep up-to-date with the position of view, counter, and book
+     */
+    public void updateShared(){
+        viewPosition = modifyCounterShare.getInt("position",0);
+        modifyCounter = gson.fromJson(modifyCounterShare.getString("counter",""), counterType);
+        arrayBook = (gson.fromJson(bookSharedPref.getString("counterBook",""), counterListType));
+        counterBook.setCounterBook(arrayBook);
+
+
     }
 }
+
+

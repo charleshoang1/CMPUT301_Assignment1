@@ -8,19 +8,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.w3c.dom.Text;
 
 /**
  * Created by charleshoang on 2017-09-30.
+ *
+ * This activity is used to create a new counter.
  */
 
 public class CreateCounterActivity extends AppCompatActivity {
 
+    /**
+     * Variables that will be used in multple methods
+     */
     EditText counterName;
     EditText counterValue;
     EditText counterComment;
@@ -36,6 +39,11 @@ public class CreateCounterActivity extends AppCompatActivity {
     CounterBook cB;
 
 
+    /**
+     * When the activity is created, initialize the variables.
+     * Create the counter
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -48,6 +56,9 @@ public class CreateCounterActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method used to initialize variables.
+     */
     private void initVariables(){
         btnCancel = (Button)findViewById(R.id.cc_cancel_button);
         btnCreate = (Button)findViewById(R.id.cc_create_button);
@@ -59,51 +70,61 @@ public class CreateCounterActivity extends AppCompatActivity {
         editor = sharedPref.edit();
     }
 
+    /**
+     * Method to create the new counter and use shared preferences to
+     * share the new count book list.
+     *
+     */
+
     public void createCounter(){
 
+        /**
+         * To handle when the create button is clicked
+         */
         btnCreate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
 
-
+                /**
+                 * Check if both count and name are both filled. Otherwise, alert dialog.
+                 */
                 if (counterName.getText().toString().equals("") || counterValue.getText().toString().equals("")){
                     missingBlankDialog();
                 }
+
+                /**
+                 * Input the name, initial count, and comment into the editor shared preference
+                 */
                 else{
 
-//                    counter = new Counter(counterName.getText().toString(), Integer.parseInt(counterValue.getText().toString())
-//                            ,counterComment.getText().toString());
                     editor.putString("name", counterName.getText().toString());
                     editor.putInt("value",Integer.parseInt(counterValue.getText().toString()));
                     editor.putString("comment", counterComment.getText().toString());
                     editor.apply();
-                    Log.d("MYtAG", "name: " + sharedPref.getString("name","") + " " + "value: " + sharedPref.getInt("value",0)+ " " + "comment: " +sharedPref.getString("comment",""));
-
-
-
                     finish();
-
-
                 }
-
             }
         });
 
+        /**
+         * If the button cancelled is click, return to the MainActivity.
+         * The value -1, is to let the MainActivity know not to add a new counter.
+         */
         btnCancel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 editor.putInt("value", -1);
                 editor.apply();
-                Log.d("MY TAG", "CANCEL WAS PRESSED IN CREATEACTIV");
-
                 finish();
 
             }
         });
-
-
-
     }
+
+    /**
+     * Method to display a alert dialog.
+     * Notify user to fill out missing required blanks.
+     */
 
     public void missingBlankDialog() {
         builder.setMessage("Blanks with * must be filled out.")
